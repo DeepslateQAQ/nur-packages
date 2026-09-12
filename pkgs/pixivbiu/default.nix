@@ -10,13 +10,13 @@
 }:
 
 let
-  version = "3.0.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "txperl";
     repo = "PixivBiu";
     tag = "v${version}";
-    hash = "sha256-iQ9c/0c21JZBLINNVeCgkisAClkReOR0xfTibwKprWQ=";
+    hash = "sha256-x64vJpI8GMqJF/G9VjIAtlsfQnytatbEzNYj0DD0fuA=";
   };
 
   frontend = stdenvNoCC.mkDerivation {
@@ -71,7 +71,7 @@ in
   pname = "pixivbiu";
   inherit version src;
 
-  vendorHash = "sha256-C2Zegax6HtK95QLcXHVpL+znsWKu1RdQ2QnYVN6oFOs=";
+  vendorHash = "sha256-qNtlfAWEIRBrc2kyUBAh/WmjLUrRw3Nez0eFZeR+OHA=";
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -8,21 +8,23 @@
   qtbase,
   qtdeclarative,
   kcoreaddons,
+  kcrash,
+  kdbusaddons,
   ki18n,
-  knotifications,
   kpipewire,
   kstatusnotifieritem,
   kwindowsystem,
+  libxcb,
   wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xwaylandvideobridge";
-  version = "0.3.0";
+  version = "0.5.2";
 
   src = fetchurl {
-    url = "mirror://kde/stable/xwaylandvideobridge/xwaylandvideobridge-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+Npuj+DsO9XqeXr4qtj+Haqzb8PHfi02u3RDgyzfz/o=";
+    url = "mirror://kde/stable/xwaylandvideobridge/src/xwaylandvideobridge-${finalAttrs.version}.tar.xz";
+    hash = "sha256-BSrQ0hhLTOESZ+Lvg9ggZMkg2dqbwDHHlzrzumpKKis=";
   };
 
   nativeBuildInputs = [
@@ -36,21 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtdeclarative
     kcoreaddons
+    kcrash
+    kdbusaddons
     ki18n
-    knotifications
     kpipewire
     kstatusnotifieritem
     kwindowsystem
+    libxcb
   ];
-
-  postPatch = ''
-    sed -i '/#include <private\/qtx11extras_p.h>/d' src/contentswindow.cpp
-    sed -i '/#include <KX11Extras>/a #include <xcb/xcb.h>' src/contentswindow.cpp
-    sed -i 's/QX11Info::connection()/xcb_connect(nullptr, nullptr)/g' src/contentswindow.cpp
-    sed -i 's/Qt6::GuiPrivate/Qt6::Gui/g' src/CMakeLists.txt
-  '';
-
-  cmakeFlags = [ "-DQT_MAJOR_VERSION=6" ];
 
   meta = {
     description = "Utility to allow streaming Wayland windows to X applications";

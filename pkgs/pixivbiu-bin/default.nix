@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixivbiu-bin";
-  version = "3.0.1";
+  version = "3.1.2";
 
   src = fetchurl {
     url = if stdenv.hostPlatform.isAarch64 then
@@ -15,9 +15,9 @@ stdenv.mkDerivation (finalAttrs: {
     else
       "https://github.com/txperl/PixivBiu/releases/download/v${finalAttrs.version}/PixivBiu_${finalAttrs.version}_linux_amd64.tar.gz";
     hash = if stdenv.hostPlatform.isAarch64 then
-      "sha256-s2KQFHFh55pnsiM8PcGfOnIW0EEsA3U3X5Wf0oQp7r0="
+      "sha256-n+PqmO2fnSh51DZf5Tm7SIcJDmA/bupO4FSQ1EVjmqA="
     else
-      "sha256-dgA1LV1P7U/lYMcuNwRdPpdH1/ul1qt0QLOcVVP147M=";
+      "sha256-cl++gd/fzdzpbk+jjhvzCbxMRLGzSAu1P4AEXpgCaJE=";
   };
 
   sourceRoot = ".";

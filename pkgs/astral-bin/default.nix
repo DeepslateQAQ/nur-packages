@@ -53,7 +53,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "astral-bin";
-  version = "2.9.12";
+  version = "2.9.60";
 
   src = fetchurl {
     url = if stdenv.hostPlatform.isAarch64 then
@@ -61,9 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
     else
       "https://github.com/ldoubil/astral/releases/download/v${finalAttrs.version}/astral-linux-x64.tar.gz";
     hash = if stdenv.hostPlatform.isAarch64 then
-      "sha256-IgoOMd7bZfyI3XVLcwLYL5AmSh/+7n3PMwL6R6/p1l8="
+      "sha256-gS1W5qx1nZXx+0ay0A1C4q8BfOiajM1bENxXQNEa7m8="
     else
-      "sha256-1MegvxRQHcGNfoXtHvbMz6s99PbYKo6xP29Pd151Pgk=";
+      "sha256-Qn5+f9RMo1TMbog+BfnSgjZ1H9m0p3nBOwYTTVqxEHs=";
   };
 
   sourceRoot = ".";
