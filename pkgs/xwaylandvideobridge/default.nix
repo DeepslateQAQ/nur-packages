@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchurl,
   cmake,
   extra-cmake-modules,
   pkg-config,
@@ -16,16 +15,14 @@
   kwindowsystem,
   libxcb,
   wrapQtAppsHook,
+  sources,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "xwaylandvideobridge";
-  version = "0.5.2";
+  version = sources.xwaylandvideobridge.version;
 
-  src = fetchurl {
-    url = "mirror://kde/stable/xwaylandvideobridge/src/xwaylandvideobridge-${finalAttrs.version}.tar.xz";
-    hash = "sha256-BSrQ0hhLTOESZ+Lvg9ggZMkg2dqbwDHHlzrzumpKKis=";
-  };
+  src = sources.xwaylandvideobridge.src;
 
   nativeBuildInputs = [
     cmake
@@ -59,4 +56,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "xwaylandvideobridge";
   };
-})
+}

@@ -1,24 +1,16 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  sources,
   makeWrapper,
 }:
 
+let
+  source = if stdenv.hostPlatform.isAarch64 then sources.pixivbiu-bin-aarch64 else sources.pixivbiu-bin-x86_64;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixivbiu-bin";
-  version = "3.1.2";
-
-  src = fetchurl {
-    url = if stdenv.hostPlatform.isAarch64 then
-      "https://github.com/txperl/PixivBiu/releases/download/v${finalAttrs.version}/PixivBiu_${finalAttrs.version}_linux_arm64.tar.gz"
-    else
-      "https://github.com/txperl/PixivBiu/releases/download/v${finalAttrs.version}/PixivBiu_${finalAttrs.version}_linux_amd64.tar.gz";
-    hash = if stdenv.hostPlatform.isAarch64 then
-      "sha256-n+PqmO2fnSh51DZf5Tm7SIcJDmA/bupO4FSQ1EVjmqA="
-    else
-      "sha256-cl++gd/fzdzpbk+jjhvzCbxMRLGzSAu1P4AEXpgCaJE=";
-  };
+  inherit (source) version src;
 
   sourceRoot = ".";
 

@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, sources
 , dpkg
 , autoPatchelfHook
 , makeWrapper
@@ -40,20 +40,12 @@
 , bubblewrap
 }:
 
+let
+  source = if stdenv.hostPlatform.isAarch64 then sources.chatgpt-aarch64 else sources.chatgpt-x86_64;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "chatgpt";
-  version = "26.908.40834";
-
-  src = fetchurl {
-    url = if stdenv.hostPlatform.isAarch64 then
-      "https://persistent.oaistatic.com/codex-app-prod/linux/deb/latest/chatgpt_arm64.deb"
-    else
-      "https://persistent.oaistatic.com/codex-app-prod/linux/deb/latest/chatgpt_amd64.deb";
-    hash = if stdenv.hostPlatform.isAarch64 then
-      "sha256-uuXFylhWJaEWqId97cRV5MJ8oCBj6pPb1qBQbtahLTE="
-    else
-      "sha256-2je457zvquoBnEeMrL5sc+4d3RXg4euzx+8KQt2BisI=";
-  };
+  inherit (source) version src;
 
   nativeBuildInputs = [
     dpkg
