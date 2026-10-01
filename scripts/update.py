@@ -614,10 +614,25 @@ def update_flake_lock(args, env: dict) -> bool:
 
 
 def submodule_head() -> str:
-    return subprocess.run(
+    proc = subprocess.run(
+        ["git", "-C", "vendor/bun2nix", "rev-parse", "HEAD"],
+        cwd=str(REPO_ROOT), capture_output=True, text=True,
+    )
+    if proc.returncode != 0:
+        raise UpdateError(
+            "could not read vendor/bun2nix HEAD; initialize the submodule "
+            "(git submodule update --init)"
+        )
+    return proc.stdout.strip()
+
+
+def submodule_gitlink() -> str:
+    """Recorded gitlink in the parent repository, used for rollback."""
+    proc = subprocess.run(
         ["git", "rev-parse", "HEAD:vendor/bun2nix"],
         cwd=str(REPO_ROOT), capture_output=True, text=True,
-    ).stdout.strip()
+    )
+    return proc.stdout.strip() if proc.returncode == 0 else ""
 
 
 def checkout_submodule(rev: str) -> None:
@@ -650,7 +665,10 @@ def update_vendor_bun2nix(args, env: dict, txn: "Transaction") -> bool:
         log("skipping vendor/bun2nix (--skip-vendor)")
         return False
     if not args.vendor:
-        current = submodule_head()
+        try:
+            current = submodule_head()
+        except UpdateError:
+            current = ""
         log(f"vendor/bun2nix frozen at {current[:12] or '(uninitialized)'} "
             "(--vendor attempts a validated bump)")
         return False
@@ -659,23 +677,16 @@ def update_vendor_bun2nix(args, env: dict, txn: "Transaction") -> bool:
         return False
 
     before = submodule_head()
+    rollback_rev = submodule_gitlink() or before
+    txn.on_rollback(lambda: checkout_submodule(rollback_rev))
     run(["git", "submodule", "update", "--init", "--remote", "--", "vendor/bun2nix"], env=env)
     after = submodule_head()
     if before == after:
         log(f"vendor/bun2nix unchanged ({after[:12]})")
         return False
 
-    try:
-        sync_shim_version()
-        validate_vendor(env)
-    except UpdateError as err:
-        log(f"vendor/bun2nix {after[:12]} rejected ({err}); reverting to {before[:12]}")
-        checkout_submodule(before)
-        subprocess.run(["git", "checkout", "--quiet", "--",
-                        "vendor/bun2nix", "pkgs/bun2nix-shim"],
-                       cwd=str(REPO_ROOT), check=False)
-        return False
-    txn.on_rollback(lambda: checkout_submodule(before))
+    sync_shim_version()
+    validate_vendor(env)
     log(f"vendor/bun2nix: {before[:12] or '(none)'} -> {after[:12]}")
     return True
 
