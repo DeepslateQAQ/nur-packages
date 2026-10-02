@@ -178,17 +178,25 @@
       sha256 = "sha256-GBuJXLVzVI45blS7BUjMqS/9wbGksBj6RVG7BiOF/co=";
     };
   };
-  qq-wlss = {
-    pname = "qq-wlss";
-    version = "c5b84d930178fe6eb4f97b5f89d3933e63f514e9";
+  qq-wayland-fix = {
+    pname = "qq-wayland-fix";
+    version = "106e0c2c6c99f1cc88d98321d8cee4865fed00b4";
     src = fetchFromGitHub {
       owner = "SHORiN-KiWATA";
-      repo = "linuxqq-wayland-screenshare-fix";
-      rev = "c5b84d930178fe6eb4f97b5f89d3933e63f514e9";
+      repo = "linuxqq-wayland-fix";
+      rev = "106e0c2c6c99f1cc88d98321d8cee4865fed00b4";
       fetchSubmodules = false;
-      sha256 = "sha256-bBv1iUgQTGDxbkO0tvTdMlXoH942oNlEGquqlvVdF8s=";
+      sha256 = "sha256-PWzi9rEVrMGUfF8XWLTDhbRHKeMCW5vLhU1PMftNElQ=";
     };
-    date = "2026-10-01";
+    date = "2026-10-02";
+  };
+  qq-wayland-fix-bin-x86_64 = {
+    pname = "qq-wayland-fix-bin-x86_64";
+    version = "0.2.7";
+    src = fetchurl {
+      url = "https://github.com/SHORiN-KiWATA/linuxqq-wayland-fix/releases/download/v0.2.7/linuxqq-wayland-fix_0.2.7-1.debian12_amd64.deb";
+      sha256 = "sha256-Z2y+CTK2fV97lUE5kWiW766p+i7yPPstdcV+CLWY2/g=";
+    };
   };
   qq-x86_64 = {
     pname = "qq-x86_64";
